@@ -1,0 +1,7 @@
+TODO
+====
+x Change the viewer to use pheromone level as factor of alpha
+x Change view_one script to transform all xml files in a folder
+x Change viewer script to have fixed axis
+x Remove black outline around point in viewer
+x Check if pheromeone is still above level 0.0 before plotting it
