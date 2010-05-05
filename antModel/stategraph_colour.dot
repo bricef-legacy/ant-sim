@@ -1,0 +1,107 @@
+digraph state_graph {
+	rankdir=TB;
+	size="8,5;"
+	layer_0 [shape=plaintext, label="layer 0"];
+	layer_1 [shape=plaintext, label="layer 1"];
+	layer_0 -> layer_1 [style=invis];
+	layer_2 [shape=plaintext, label="layer 2"];
+	layer_1 -> layer_2 [style=invis];
+	layer_3 [shape=plaintext, label="layer 3"];
+	layer_2 -> layer_3 [style=invis];
+	layer_4 [shape=plaintext, label="layer 4"];
+	layer_3 -> layer_4 [style=invis];
+	layer_5 [shape=plaintext, label="layer 5"];
+	layer_4 -> layer_5 [style=invis];
+	
+	/* States */
+	Ant_05 [label = "05"]
+	Ant_03 [label = "03"]
+	Ant_02 [label = "02"]
+	Ant_04 [label = "04"]
+	Ant_01 [label = "01"]
+	Ant_00 [label = "00"]
+	Pheromone_03 [label = "03"]
+	Pheromone_02 [label = "02"]
+	Pheromone_01 [label = "01"]
+	Pheromone_00 [label = "00"]
+	Generator_01 [label = "01"]
+	Generator_00 [label = "00"]
+	FoodGenerator_01 [label = "01"]
+	FoodGenerator_00 [label = "00"]
+	Nest_01 [label = "01"]
+	Nest_00 [label = "00"]
+	Food_02 [label = "02"]
+	Food_01 [label = "01"]
+	Food_00 [label = "00"]
+	Ant_updateState_00_01 [label = "updateState", shape = box,style=filled,color=antiquewhite];
+	Ant_stayInNest_01_04 [label = "stayInNest", shape = box,style=filled,color=antiquewhite];
+	Ant_walk_01_02 [label = "walk", shape = box,style=filled,color=antiquewhite];
+	Ant_deposit_02_03 [label = "deposit", shape = box,style=filled,color=antiquewhite];
+	Ant_depositIdle_02_04 [label = "depositIdle", shape = box,style=filled,color=antiquewhite];
+	Ant_forage_03_04 [label = "forage", shape = box,style=filled,color=antiquewhite];
+	Ant_forageIdle_03_04 [label = "forageIdle", shape = box,style=filled,color=antiquewhite];
+	Ant_decreaseFoodLevel_04_05 [label = "decreaseFoodLevel", shape = box,style=filled,color=antiquewhite];
+	Ant_findNest_01_02 [label = "findNest", shape = box,style=filled,color=antiquewhite];
+	Pheromone_pheromoneInformation_00_01 [label = "pheromoneInformation", shape = box,style=filled,color=antiquewhite];
+	Pheromone_decreasePheromoneLife_01_02 [label = "decreasePheromoneLife", shape = box,style=filled,color=antiquewhite];
+	Pheromone_increasePheromoneLife_02_03 [label = "increasePheromoneLife", shape = box,style=filled,color=antiquewhite];
+	Generator_produce_00_01 [label = "produce", shape = box,style=filled,color=antiquewhite];
+	FoodGenerator_produceFood_00_01 [label = "produceFood", shape = box,style=filled,color=antiquewhite];
+	Nest_nestInformation_00_01 [label = "nestInformation", shape = box,style=filled,color=antiquewhite];
+	Food_foodInformation_00_01 [label = "foodInformation", shape = box,style=filled,color=antiquewhite];
+	Food_updateFood_01_02 [label = "updateFood", shape = box,style=filled,color=antiquewhite];
+	
+	/* Transitions */
+	Ant_00 -> Ant_updateState_00_01;
+	Ant_updateState_00_01 -> Ant_01;
+	Ant_01 -> Ant_stayInNest_01_04 [ label = "a.state NEQ 1 AND\na.state NEQ 2"];
+	Ant_stayInNest_01_04 -> Ant_04;
+	Ant_01 -> Ant_walk_01_02 [ label = "a.state EQ 1"];
+	Ant_walk_01_02 -> Ant_02;
+	Ant_02 -> Ant_deposit_02_03 [ label = "a.state EQ 1 OR\na.state EQ 2"];
+	Ant_deposit_02_03 -> Ant_03;
+	Ant_02 -> Ant_depositIdle_02_04 [ label = "a.state NEQ 1 AND\na.state NEQ 2"];
+	Ant_depositIdle_02_04 -> Ant_04;
+	Ant_03 -> Ant_forage_03_04 [ label = "a.state EQ 1"];
+	Ant_forage_03_04 -> Ant_04;
+	Ant_03 -> Ant_forageIdle_03_04 [ label = "a.state NEQ 1"];
+	Ant_forageIdle_03_04 -> Ant_04;
+	Ant_04 -> Ant_decreaseFoodLevel_04_05;
+	Ant_decreaseFoodLevel_04_05 -> Ant_05;
+	Ant_01 -> Ant_findNest_01_02 [ label = "a.state EQ 2"];
+	Ant_findNest_01_02 -> Ant_02;
+	Pheromone_00 -> Pheromone_pheromoneInformation_00_01;
+	Pheromone_pheromoneInformation_00_01 -> Pheromone_01;
+	Pheromone_01 -> Pheromone_decreasePheromoneLife_01_02;
+	Pheromone_decreasePheromoneLife_01_02 -> Pheromone_02;
+	Pheromone_02 -> Pheromone_increasePheromoneLife_02_03;
+	Pheromone_increasePheromoneLife_02_03 -> Pheromone_03;
+	Generator_00 -> Generator_produce_00_01;
+	Generator_produce_00_01 -> Generator_01;
+	FoodGenerator_00 -> FoodGenerator_produceFood_00_01;
+	FoodGenerator_produceFood_00_01 -> FoodGenerator_01;
+	Nest_00 -> Nest_nestInformation_00_01;
+	Nest_nestInformation_00_01 -> Nest_01;
+	Food_00 -> Food_foodInformation_00_01;
+	Food_foodInformation_00_01 -> Food_01;
+	Food_01 -> Food_updateFood_01_02;
+	Food_updateFood_01_02 -> Food_02;
+	
+	/* Communications */
+	Ant_forage_03_04 -> Food_updateFood_01_02 [ label = "foodEaten" color="#00ff00" constraint=false];
+	Food_updateFood_01_02 -> FoodGenerator_produceFood_00_01 [ label = "newFood" color="#00ff00" constraint=false];
+	Ant_deposit_02_03 -> Generator_produce_00_01 [ label = "newPheromoneInput" color="#00ff00" constraint=false];
+	Ant_deposit_02_03 -> Pheromone_increasePheromoneLife_02_03 [ label = "pheromoneIncreased" color="#00ff00" constraint=false];
+	Pheromone_pheromoneInformation_00_01 -> Ant_findNest_01_02 [ label = "pheromoneInformation" color="#00ff00" constraint=false];
+	Nest_nestInformation_00_01 -> Ant_findNest_01_02 [ label = "nestInformation" color="#00ff00" constraint=false];
+	Food_foodInformation_00_01 -> Ant_forage_03_04 [ label = "foodInformation" color="#00ff00" constraint=false];
+	Pheromone_pheromoneInformation_00_01 -> Ant_deposit_02_03 [ label = "pheromoneInformation" color="#00ff00" constraint=false];
+	Food_foodInformation_00_01 -> Ant_walk_01_02 [ label = "foodInformation" color="#00ff00" constraint=false];
+	Pheromone_pheromoneInformation_00_01 -> Ant_walk_01_02 [ label = "pheromoneInformation" color="#00ff00" constraint=false];
+	{ rank=same; layer_0;  Ant_updateState_00_01;  Pheromone_pheromoneInformation_00_01;  Nest_nestInformation_00_01;  Food_foodInformation_00_01; }
+	{ rank=same; layer_1;  Ant_stayInNest_01_04;  Ant_walk_01_02;  Ant_findNest_01_02;  Pheromone_decreasePheromoneLife_01_02; }
+	{ rank=same; layer_2;  Ant_deposit_02_03;  Ant_depositIdle_02_04; }
+	{ rank=same; layer_3;  Ant_forage_03_04;  Ant_forageIdle_03_04;  Pheromone_increasePheromoneLife_02_03;  Generator_produce_00_01; }
+	{ rank=same; layer_4;  Ant_decreaseFoodLevel_04_05;  Food_updateFood_01_02; }
+	{ rank=same; layer_5;  FoodGenerator_produceFood_00_01; }
+}

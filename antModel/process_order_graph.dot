@@ -1,0 +1,139 @@
+digraph communication_graph {
+	rankdir=BT;
+	size="8,5;"
+	layer_0 [ color="#ff0000" label="layer 0"];
+	Nest_nestInformation_00_01 [ shape = rect label="Nest_nestInformation_00_01 [-4]" ];
+	Nest_nestInformation_00_01 -> layer_0;
+	Pheromone_pheromoneInformation_00_01 [ shape = rect label="Pheromone_pheromoneInformation_00_01 [-10]" ];
+	Pheromone_pheromoneInformation_00_01 -> Nest_nestInformation_00_01;
+	Food_foodInformation_00_01 [ shape = rect label="Food_foodInformation_00_01 [-19]" ];
+	Food_foodInformation_00_01 -> Pheromone_pheromoneInformation_00_01;
+	Ant_updateState_00_01 [ shape = rect label="Ant_updateState_00_01 [0]" ];
+	Ant_updateState_00_01 -> Food_foodInformation_00_01;
+	layer_1 [ color="#ff0000" label="layer 1"];
+	layer_1 ->Ant_updateState_00_01;
+	Pheromone_decreasePheromoneLife_01_02 [ shape = rect label="Pheromone_decreasePheromoneLife_01_02 [0]" ];
+	Pheromone_decreasePheromoneLife_01_02 -> layer_1;
+	Ant_stayInNest_01_04 [ shape = rect label="Ant_stayInNest_01_04 [0]" ];
+	Ant_stayInNest_01_04 -> Pheromone_decreasePheromoneLife_01_02;
+	Ant_walk_01_02 [ shape = rect label="Ant_walk_01_02 [10]" ];
+	Ant_walk_01_02 -> Ant_stayInNest_01_04;
+	Ant_findNest_01_02 [ shape = rect label="Ant_findNest_01_02 [7]" ];
+	Ant_findNest_01_02 -> Ant_walk_01_02;
+	layer_2 [ color="#ff0000" label="layer 2"];
+	layer_2 ->Ant_findNest_01_02;
+	Ant_depositIdle_02_04 [ shape = rect label="Ant_depositIdle_02_04 [0]" ];
+	Ant_depositIdle_02_04 -> layer_2;
+	Ant_deposit_02_03 [ shape = rect label="Ant_deposit_02_03 [0]" ];
+	Ant_deposit_02_03 -> Ant_depositIdle_02_04;
+	layer_3 [ color="#ff0000" label="layer 3"];
+	layer_3 ->Ant_deposit_02_03;
+	Ant_forageIdle_03_04 [ shape = rect label="Ant_forageIdle_03_04 [0]" ];
+	Ant_forageIdle_03_04 -> layer_3;
+	Ant_forage_03_04 [ shape = rect label="Ant_forage_03_04 [7]" ];
+	Ant_forage_03_04 -> Ant_forageIdle_03_04;
+	Pheromone_increasePheromoneLife_02_03 [ shape = rect label="Pheromone_increasePheromoneLife_02_03 [2]" ];
+	Pheromone_increasePheromoneLife_02_03 -> Ant_forage_03_04;
+	Generator_produce_00_01 [ shape = rect label="Generator_produce_00_01 [1]" ];
+	Generator_produce_00_01 -> Pheromone_increasePheromoneLife_02_03;
+	layer_4 [ color="#ff0000" label="layer 4"];
+	layer_4 ->Generator_produce_00_01;
+	Food_updateFood_01_02 [ shape = rect label="Food_updateFood_01_02 [-2]" ];
+	Food_updateFood_01_02 -> layer_4;
+	Ant_decreaseFoodLevel_04_05 [ shape = rect label="Ant_decreaseFoodLevel_04_05 [0]" ];
+	Ant_decreaseFoodLevel_04_05 -> Food_updateFood_01_02;
+	layer_5 [ color="#ff0000" label="layer 5"];
+	layer_5 ->Ant_decreaseFoodLevel_04_05;
+	FoodGenerator_produceFood_00_01 [ shape = rect label="FoodGenerator_produceFood_00_01 [2]" ];
+	FoodGenerator_produceFood_00_01 -> layer_5;
+	pheromoneInformation_message [ label = "pheromoneInformation" color="#00ff00" shape = parallelogram];
+	pheromoneInformation_message_sync_start_0 [ label = "start" color="#00ff00" shape = parallelogram];
+	pheromoneInformation_message_sync_start_0 -> pheromoneInformation_message [ color="#00ff00" ];
+	{ rank=same; Pheromone_pheromoneInformation_00_01; pheromoneInformation_message_sync_start_0; }
+	pheromoneInformation_message_sync_end_0 [ label = "end" color="#00ff00" shape = parallelogram];
+	pheromoneInformation_message_sync_end_0 -> pheromoneInformation_message_sync_start_0 [ color="#00ff00" ];
+	pheromoneInformation_message_sync_end_0 -> Ant_walk_01_02 [ color="#00ff00" constraint=false ];
+	pheromoneInformation_message_sync_end_0 -> Ant_findNest_01_02 [ color="#00ff00" constraint=false ];
+	pheromoneInformation_message_sync_start_0 -> Pheromone_pheromoneInformation_00_01 [ color="#00ff00", constraint=false, style=dashed ];
+	{ rank=same; Ant_walk_01_02; pheromoneInformation_message_sync_end_0; }
+	pheromoneInformation_message_sync_start_1 [ label = "start" color="#00ff00" shape = parallelogram];
+	pheromoneInformation_message_sync_start_1 -> pheromoneInformation_message [ color="#00ff00" ];
+	{ rank=same; Ant_findNest_01_02; pheromoneInformation_message_sync_start_1; }
+	pheromoneInformation_message_sync_end_1 [ label = "end" color="#00ff00" shape = parallelogram];
+	pheromoneInformation_message_sync_end_1 -> pheromoneInformation_message_sync_start_1 [ color="#00ff00" ];
+	pheromoneInformation_message_sync_end_1 -> Ant_deposit_02_03 [ color="#00ff00" constraint=false ];
+	pheromoneInformation_message_sync_start_1 -> Pheromone_pheromoneInformation_00_01 [ color="#00ff00", constraint=false, style=dashed ];
+	pheromoneInformation_message_sync_start_1 -> Ant_walk_01_02 [ color="#00ff00", constraint=false, style=dashed ];
+	pheromoneInformation_message_sync_start_1 -> Ant_findNest_01_02 [ color="#00ff00", constraint=false, style=dashed ];
+	{ rank=same; Ant_deposit_02_03; pheromoneInformation_message_sync_end_1; }
+	newPheromoneInput_message [ label = "newPheromoneInput" color="#00ff00" shape = parallelogram];
+	newPheromoneInput_message_sync_start_0 [ label = "start" color="#00ff00" shape = parallelogram];
+	newPheromoneInput_message_sync_start_0 -> newPheromoneInput_message [ color="#00ff00" ];
+	{ rank=same; Ant_deposit_02_03; newPheromoneInput_message_sync_start_0; }
+	newPheromoneInput_message_sync_end_0 [ label = "end" color="#00ff00" shape = parallelogram];
+	newPheromoneInput_message_sync_end_0 -> newPheromoneInput_message_sync_start_0 [ color="#00ff00" ];
+	newPheromoneInput_message_sync_end_0 -> Generator_produce_00_01 [ color="#00ff00" constraint=false ];
+	newPheromoneInput_message_sync_start_0 -> Ant_deposit_02_03 [ color="#00ff00", constraint=false, style=dashed ];
+	{ rank=same; Generator_produce_00_01; newPheromoneInput_message_sync_end_0; }
+	foodInformation_message [ label = "foodInformation" color="#00ff00" shape = parallelogram];
+	foodInformation_message_sync_start_0 [ label = "start" color="#00ff00" shape = parallelogram];
+	foodInformation_message_sync_start_0 -> foodInformation_message [ color="#00ff00" ];
+	{ rank=same; Food_foodInformation_00_01; foodInformation_message_sync_start_0; }
+	foodInformation_message_sync_end_0 [ label = "end" color="#00ff00" shape = parallelogram];
+	foodInformation_message_sync_end_0 -> foodInformation_message_sync_start_0 [ color="#00ff00" ];
+	foodInformation_message_sync_end_0 -> Ant_walk_01_02 [ color="#00ff00" constraint=false ];
+	foodInformation_message_sync_start_0 -> Food_foodInformation_00_01 [ color="#00ff00", constraint=false, style=dashed ];
+	{ rank=same; Ant_walk_01_02; foodInformation_message_sync_end_0; }
+	foodInformation_message_sync_start_1 [ label = "start" color="#00ff00" shape = parallelogram];
+	foodInformation_message_sync_start_1 -> foodInformation_message [ color="#00ff00" ];
+	{ rank=same; Ant_walk_01_02; foodInformation_message_sync_start_1; }
+	foodInformation_message_sync_end_1 [ label = "end" color="#00ff00" shape = parallelogram];
+	foodInformation_message_sync_end_1 -> foodInformation_message_sync_start_1 [ color="#00ff00" ];
+	foodInformation_message_sync_end_1 -> Ant_forage_03_04 [ color="#00ff00" constraint=false ];
+	foodInformation_message_sync_start_1 -> Food_foodInformation_00_01 [ color="#00ff00", constraint=false, style=dashed ];
+	foodInformation_message_sync_start_1 -> Ant_walk_01_02 [ color="#00ff00", constraint=false, style=dashed ];
+	{ rank=same; Ant_forage_03_04; foodInformation_message_sync_end_1; }
+	foodEaten_message [ label = "foodEaten" color="#00ff00" shape = parallelogram];
+	foodEaten_message_sync_start_0 [ label = "start" color="#00ff00" shape = parallelogram];
+	foodEaten_message_sync_start_0 -> foodEaten_message [ color="#00ff00" ];
+	{ rank=same; Ant_forage_03_04; foodEaten_message_sync_start_0; }
+	foodEaten_message_sync_end_0 [ label = "end" color="#00ff00" shape = parallelogram];
+	foodEaten_message_sync_end_0 -> foodEaten_message_sync_start_0 [ color="#00ff00" ];
+	foodEaten_message_sync_end_0 -> Food_updateFood_01_02 [ color="#00ff00" constraint=false ];
+	foodEaten_message_sync_start_0 -> Ant_forage_03_04 [ color="#00ff00", constraint=false, style=dashed ];
+	{ rank=same; Food_updateFood_01_02; foodEaten_message_sync_end_0; }
+	newFood_message [ label = "newFood" color="#00ff00" shape = parallelogram];
+	newFood_message_sync_start_0 [ label = "start" color="#00ff00" shape = parallelogram];
+	newFood_message_sync_start_0 -> newFood_message [ color="#00ff00" ];
+	{ rank=same; Food_updateFood_01_02; newFood_message_sync_start_0; }
+	newFood_message_sync_end_0 [ label = "end" color="#00ff00" shape = parallelogram];
+	newFood_message_sync_end_0 -> newFood_message_sync_start_0 [ color="#00ff00" ];
+	newFood_message_sync_end_0 -> FoodGenerator_produceFood_00_01 [ color="#00ff00" constraint=false ];
+	newFood_message_sync_start_0 -> Food_updateFood_01_02 [ color="#00ff00", constraint=false, style=dashed ];
+	{ rank=same; FoodGenerator_produceFood_00_01; newFood_message_sync_end_0; }
+	pheromoneIncreased_message [ label = "pheromoneIncreased" color="#00ff00" shape = parallelogram];
+	pheromoneIncreased_message_sync_start_0 [ label = "start" color="#00ff00" shape = parallelogram];
+	pheromoneIncreased_message_sync_start_0 -> pheromoneIncreased_message [ color="#00ff00" ];
+	{ rank=same; Ant_deposit_02_03; pheromoneIncreased_message_sync_start_0; }
+	pheromoneIncreased_message_sync_end_0 [ label = "end" color="#00ff00" shape = parallelogram];
+	pheromoneIncreased_message_sync_end_0 -> pheromoneIncreased_message_sync_start_0 [ color="#00ff00" ];
+	pheromoneIncreased_message_sync_end_0 -> Pheromone_increasePheromoneLife_02_03 [ color="#00ff00" constraint=false ];
+	pheromoneIncreased_message_sync_start_0 -> Ant_deposit_02_03 [ color="#00ff00", constraint=false, style=dashed ];
+	{ rank=same; Pheromone_increasePheromoneLife_02_03; pheromoneIncreased_message_sync_end_0; }
+	nestInformation_message [ label = "nestInformation" color="#00ff00" shape = parallelogram];
+	nestInformation_message_sync_start_0 [ label = "start" color="#00ff00" shape = parallelogram];
+	nestInformation_message_sync_start_0 -> nestInformation_message [ color="#00ff00" ];
+	{ rank=same; Nest_nestInformation_00_01; nestInformation_message_sync_start_0; }
+	nestInformation_message_sync_end_0 [ label = "end" color="#00ff00" shape = parallelogram];
+	nestInformation_message_sync_end_0 -> nestInformation_message_sync_start_0 [ color="#00ff00" ];
+	nestInformation_message_sync_end_0 -> Ant_findNest_01_02 [ color="#00ff00" constraint=false ];
+	nestInformation_message_sync_start_0 -> Nest_nestInformation_00_01 [ color="#00ff00", constraint=false, style=dashed ];
+	{ rank=same; Ant_findNest_01_02; nestInformation_message_sync_end_0; }
+	Ant_deposit_02_03 -> newPheromoneInput_message [ color="#00ff00" constraint=false ];
+	Ant_deposit_02_03 -> pheromoneIncreased_message [ color="#00ff00" constraint=false ];
+	Ant_forage_03_04 -> foodEaten_message [ color="#00ff00" constraint=false ];
+	Pheromone_pheromoneInformation_00_01 -> pheromoneInformation_message [ color="#00ff00" constraint=false ];
+	Nest_nestInformation_00_01 -> nestInformation_message [ color="#00ff00" constraint=false ];
+	Food_foodInformation_00_01 -> foodInformation_message [ color="#00ff00" constraint=false ];
+	Food_updateFood_01_02 -> newFood_message [ color="#00ff00" constraint=false ];
+}

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmodel version="2">
+
+	<name>Pharaoh's Ants Foraging Model</name>
+	<version>COM6006 version</version>
+	<description>A simple foraging model for Pharaoh's ants</description>
+	<author>Mesude Bicak</author>
+	<date>230410</date>
+
+	<environment>
+		<functionFiles>
+			<file>antFunctions.c</file>			
+		</functionFiles>
+	</environment>
+	
+	<agents>
+	<xagent>
+		<name>Ant</name>
+		<description></description>
+		<memory>
+		<variable><type>int</type><name>antID</name><description></description></variable>
+		<variable><type>double</type><name>antX</name><description></description></variable>
+		<variable><type>double</type><name>antY</name><description></description></variable>
+		<variable><type>double</type><name>foodLevel</name><description></description></variable>
+		<variable><type>int</type><name>isFed</name><description></description></variable>	
+		<variable><type>int</type><name>isInNest</name><description></description></variable>
+		<variable><type>int</type><name>antDirection</name><description></description></variable>
+		<variable><type>int</type><name>state</name><description></description></variable>
+		</memory>
+		<functions>
+			<function>
+				<name>updateState</name><description>random coordinates for ant</description>
+				<currentState>00</currentState>
+				<nextState>01</nextState>
+			</function>							
+			<function>
+				<name>stayInNest</name><description>random coordinates for ant</description>
+				<currentState>01</currentState>
+				<nextState>04</nextState>
+				<condition>
+					<lhs>
+					<lhs><value>a.state</value></lhs>
+					<op>NEQ</op>
+					<rhs><value>1</value></rhs>
+					</lhs>
+					<op>AND</op>
+					<rhs>
+					<lhs><value>a.state</value></lhs>
+					<op>NEQ</op>
+					<rhs><value>2</value></rhs>
+					</rhs>
+				</condition>
+			</function>							
+			<function>
+				<name>walk</name><description>random coordinates for ant</description>
+				<currentState>01</currentState>
+				<nextState>02</nextState>
+				<condition>
+					<lhs><value>a.state</value></lhs>
+					<op>EQ</op>
+					<rhs><value>1</value></rhs>
+				</condition>
+				<inputs><input><messageName>pheromoneInformation</messageName></input></inputs>
+				<inputs><input><messageName>foodInformation</messageName></input></inputs>
+			</function>							
+			<function>
+				<name>deposit</name><description>deposit a pheromone</description>
+				<currentState>02</currentState>
+				<nextState>03</nextState>
+				<condition>
+					<lhs>
+						<lhs><value>a.state</value></lhs>
+						<op>EQ</op>
+						<rhs><value>1</value></rhs>
+					</lhs>
+					<op>OR</op>
+					<rhs>
+						<lhs><value>a.state</value></lhs>
+						<op>EQ</op>
+						<rhs><value>2</value></rhs>
+					</rhs>
+				</condition>	
+				<inputs><input><messageName>pheromoneInformation</messageName></input></inputs>				
+				<outputs><output><messageName>newPheromoneInput</messageName></output></outputs>
+				<outputs><output><messageName>pheromoneIncreased</messageName></output></outputs>
+			</function>				
+			<function>
+				<name>depositIdle</name><description>do nothing</description>
+				<currentState>02</currentState>
+				<nextState>04</nextState>
+				<condition>
+					<lhs>
+						<lhs><value>a.state</value></lhs>
+						<op>NEQ</op>
+						<rhs><value>1</value></rhs>
+					</lhs>
+					<op>AND</op>
+					<rhs>
+						<lhs><value>a.state</value></lhs>
+						<op>NEQ</op>
+						<rhs><value>2</value></rhs>
+					</rhs>
+				</condition>	
+			</function>				
+			<function>
+				<name>forage</name><description>find a food source</description>
+				<currentState>03</currentState>
+				<nextState>04</nextState>
+				<condition>
+					<lhs><value>a.state</value></lhs>
+					<op>EQ</op>
+					<rhs><value>1</value></rhs>
+				</condition>
+				<inputs><input><messageName>foodInformation</messageName></input></inputs>				
+				<outputs><output><messageName>foodEaten</messageName></output></outputs>
+			</function>
+			<function>
+				<name>forageIdle</name><description>do nothing</description>
+				<currentState>03</currentState>
+				<nextState>04</nextState>
+				<condition>
+					<lhs><value>a.state</value></lhs>
+					<op>NEQ</op>
+					<rhs><value>1</value></rhs>
+				</condition>
+			</function>
+			<function>
+				<name>decreaseFoodLevel</name><description>increase hunger</description>
+				<currentState>04</currentState>
+				<nextState>05</nextState>
+			</function>
+			<function>
+				<name>findNest</name><description>find the nest</description>
+				<currentState>01</currentState>
+				<nextState>02</nextState>
+				<condition>
+					<lhs><value>a.state</value></lhs>
+					<op>EQ</op>
+					<rhs><value>2</value></rhs>
+				</condition>
+				<inputs><input><messageName>nestInformation</messageName></input></inputs>
+				<inputs><input><messageName>pheromoneInformation</messageName></input></inputs>
+			</function>													
+		</functions>
+	</xagent>
+	<xagent>
+		<name>Pheromone</name>
+		<description></description>
+		<memory>
+		<variable><type>int</type><name>pheromoneID</name><description></description></variable>
+		<variable><type>double</type><name>life</name><description></description></variable>
+		<variable><type>double</type><name>pheromoneX</name><description></description></variable>
+		<variable><type>double</type><name>pheromoneY</name><description></description></variable>
+		</memory>
+		<functions>
+			<function>
+				<name>pheromoneInformation</name><description>pheromone information</description>
+				<currentState>00</currentState>
+				<nextState>01</nextState>
+				<outputs><output><messageName>pheromoneInformation</messageName></output></outputs>
+			</function>
+			<function>
+				<name>decreasePheromoneLife</name><description>decay pheromone</description>
+				<currentState>01</currentState>
+				<nextState>02</nextState>
+			</function>							
+			<function>
+				<name>increasePheromoneLife</name><description>reinforce pheromone</description>
+				<currentState>02</currentState>
+				<nextState>03</nextState>
+				<inputs><input><messageName>pheromoneIncreased</messageName></input></inputs>
+			</function>							
+		</functions>		
+	</xagent>
+	<xagent>
+		<name>Generator</name>
+		<description></description>
+		<memory>
+		<variable><type>int</type><name>memoryID</name><description></description></variable>
+		</memory>
+		<functions>
+			<function>
+				<name>produce</name><description>create dynamic pheromone</description>
+				<currentState>00</currentState>
+				<nextState>01</nextState>
+				<inputs><input><messageName>newPheromoneInput</messageName></input></inputs>
+			</function>				
+		</functions>
+	</xagent>
+	<xagent>
+		<name>FoodGenerator</name>
+		<description></description>
+		<memory>
+			<variable><type>int</type><name>memoryFoodID</name><description></description></variable>
+		</memory>
+		<functions>
+			<function>
+				<name>produceFood</name><description>create dynamic food</description>
+				<currentState>00</currentState>
+				<nextState>01</nextState>
+				<inputs><input><messageName>newFood</messageName></input></inputs>
+			</function>				
+		</functions>
+	</xagent>
+	<xagent>
+		<name>Nest</name>
+		<description>ant nest</description>
+		<memory>
+			<variable><type>double</type><name>nestX</name><description></description></variable>
+			<variable><type>double</type><name>nestY</name><description></description></variable>
+			<variable><type>double</type><name>nestRadius</name><description></description></variable>
+		</memory>
+		<functions>
+			<function>
+				<name>nestInformation</name><description>nest information</description>
+				<currentState>00</currentState>
+				<nextState>01</nextState>
+				<outputs><output><messageName>nestInformation</messageName></output></outputs>
+			</function>
+		</functions>
+	</xagent>
+	<xagent>
+		<name>Food</name>
+		<description></description>
+		<memory>
+			<variable><type>int</type><name>foodID</name><description></description></variable>
+			<variable><type>double</type><name>size</name><description></description></variable>
+			<variable><type>double</type><name>foodX</name><description></description></variable>
+			<variable><type>double</type><name>foodY</name><description></description></variable>
+			<variable><type>double</type><name>radius</name><description></description></variable>
+		</memory>
+		<functions>
+			<function>
+				<name>foodInformation</name><description>food information</description>
+				<currentState>00</currentState>
+				<nextState>01</nextState>
+				<outputs><output><messageName>foodInformation</messageName></output></outputs>
+			</function>
+			<function>
+				<name>updateFood</name><description>update food size and create new food if depleted</description>
+				<currentState>01</currentState>
+				<nextState>02</nextState>
+				<inputs><input><messageName>foodEaten</messageName></input></inputs>
+				<outputs><output><messageName>newFood</messageName></output></outputs>
+			</function>
+		</functions>		
+	</xagent>
+	</agents>
+	<messages>
+		<message>
+			<name>pheromoneInformation</name>
+			<description>pheromone deposition</description>
+			<variables>
+				<variable><type>int</type><name>pheromoneID</name><description></description></variable>
+				<variable><type>double</type><name>pheromoneX</name><description></description></variable>
+				<variable><type>double</type><name>pheromoneY</name><description></description></variable>
+				<variable><type>double</type><name>life</name><description></description></variable>
+			</variables>
+		</message>
+		<message>
+			<name>newPheromoneInput</name>
+			<description>pheromone deposition</description>
+			<variables>
+				<variable><type>double</type><name>pheromoneX</name><description></description></variable>
+				<variable><type>double</type><name>pheromoneY</name><description></description></variable>
+			</variables>
+		</message>
+		<message>
+			<name>foodInformation</name>
+			<description>food coordinates</description>
+			<variables>
+				<variable><type>int</type><name>foodID</name><description></description></variable>
+				<variable><type>double</type><name>foodX</name><description></description></variable>
+				<variable><type>double</type><name>foodY</name><description></description></variable>
+				<variable><type>double</type><name>size</name><description></description></variable>
+				<variable><type>double</type><name>radius</name><description></description></variable>
+			</variables>
+		</message>
+		<message>
+			<name>foodEaten</name>
+			<description>food eaten</description>
+			<variables>
+				<variable><type>int</type><name>id</name><description></description></variable>
+				<variable><type>double</type><name>size</name><description></description></variable>
+			</variables>
+		</message>
+		<message>
+			<name>newFood</name>
+			<description>new food agent</description>
+			<variables>
+				<variable><type>double</type><name>size</name><description></description></variable>
+				<variable><type>double</type><name>foodX</name><description></description></variable>
+				<variable><type>double</type><name>foodY</name><description></description></variable>
+				<variable><type>double</type><name>radius</name><description></description></variable>
+			</variables>
+		</message>		
+		<message>
+			<name>pheromoneIncreased</name>
+			<description>new food agent</description>
+			<variables>
+				<variable><type>int</type><name>pheromoneID</name><description></description></variable>
+				<variable><type>double</type><name>increase</name><description></description></variable>
+			</variables>
+		</message>		
+		<message>
+			<name>nestInformation</name>
+			<description>nest coordinates</description>
+			<variables>
+				<variable><type>double</type><name>nestX</name><description></description></variable>
+				<variable><type>double</type><name>nestY</name><description></description></variable>
+				<variable><type>double</type><name>nestRadius</name><description></description></variable>
+			</variables>
+		</message>		
+	</messages>
+</xmodel>
