@@ -48,6 +48,7 @@ where option is one of:
 }
 
 function movie-only {
+    echo "== Making Movie from existing frames"
     #move to where they are
     cd $WORKING_DIR
 
@@ -59,11 +60,13 @@ function movie-only {
 }
 
 function frames-only {
+    echo "== Making frames"
     #make the frames
-    $FRAME_MAKER $MODEL_DIR $WORKING_DIR
+    $FRAME_MAKER $WORKING_DIR $WORKING_DIR
 }
 
 function make-movie {
+    echo "== Making frames and encodeing movie"
     frames-only
     movie-only
 }
@@ -132,7 +135,7 @@ case "$1" in
         cleanbuild
         build
         runsim
-        movie
+        make-movie
         ;;
     "-h"|"--help")
         usage
