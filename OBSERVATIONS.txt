@@ -1,0 +1,11 @@
+note:
+====
+
+Because the Pheromone objects do not get terminated, they accumulate, and so the longer the simulation runs, the slower it gets. That seems like a problem. Since the model algorithm complexity is not linear, this is an equivalent of Shlemiel the Painter's Algorithm. Bad.
+
+### possible solutions: ###
+Using something like space partitioning, a la collision detection, may help, as only objects within a subset of the Tree would have to be compared.
+
+Ideally, the number of pheromone would be static and known. Possible to create a single "Environment" Object that stores a grid of cells? that way, there is no costly compare between each ant and each pheromone (which currently makes it greater than O(n^2) )
+
+

@@ -1,0 +1,7 @@
+
+#ignore generated files
+syntax: glob
+*.o
+
+syntax: regexp
+working/*

@@ -1,7 +1,13 @@
 TODO
 ====
-x Change the viewer to use pheromone level as factor of alpha
-x Change view_one script to transform all xml files in a folder
-x Change viewer script to have fixed axis
-x Remove black outline around point in viewer
-x Check if pheromeone is still above level 0.0 before plotting it
+x Decide on a research question
+x Decide on some metrics to analyse the model
+   +-> Write some code to grab the metrics from the XML
+
+DONE
+====
+(brice) Change the viewer to use pheromone level as factor of alpha
+(brice) Change view_one script to transform all xml files in a folder
+(brice) Change viewer script to have fixed axis
+(brice) Remove black outline around point in viewer
+(brice) Check if pheromeone is still above level 0.0 before plotting it
