@@ -40,7 +40,7 @@ where option is one of:
     
     --cleanrun              Cleans generated .xml and .png files
     
-    --clean-run-movie [num] Does everything at once, cleans, builds, runs the 
+    --do-all [num]           Does everything at once, cleans, builds, runs the 
                             simulation and then makes a movie.
                             
     -h --help               Shows this usage message
