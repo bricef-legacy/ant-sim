@@ -1,11 +1,9 @@
 #! /usr/bin/env python
 import xml.etree.ElementTree as ET
-import matplotlib.pyplot as plt
 import Image
 import ImageDraw
 import numpy as np
 import sys, re, os
-import time
 
 files = os.listdir(sys.argv[1])
 files.sort()
