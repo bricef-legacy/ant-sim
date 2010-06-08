@@ -27,3 +27,6 @@
 /** \def STATE
  * \brief Direct access to state of Ant agent memory variable. */
 #define STATE (current_xmachine_Ant->state)
+/** \def LASTFOODCONC
+ * \brief Direct access to lastFoodConc of Ant agent memory variable. */
+#define LASTFOODCONC (current_xmachine_Ant->lastFoodConc)

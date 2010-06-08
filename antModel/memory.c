@@ -962,6 +962,7 @@ xmachine_memory_Ant * init_Ant_agent()
 	current->isInNest = 0;
 	current->antDirection = 0;
 	current->state = 0;
+	current->lastFoodConc = 0.0;
 
 	return current;
 }
@@ -991,6 +992,7 @@ void unittest_init_Ant_agent()
 		current_xmachine_Ant->isInNest = 0;
 		current_xmachine_Ant->antDirection = 0;
 		current_xmachine_Ant->state = 0;
+		current_xmachine_Ant->lastFoodConc = 0.0;
 	
 }
 
@@ -1081,7 +1083,7 @@ void add_Ant_agent_internal(xmachine_memory_Ant * agent, xmachine_memory_Ant_sta
 
 }
 
-/** \fn void add_Ant_agent(int antID, double antX, double antY, double foodLevel, int isFed, int isInNest, int antDirection, int state)
+/** \fn void add_Ant_agent(int antID, double antX, double antY, double foodLevel, int isFed, int isInNest, int antDirection, int state, double lastFoodConc)
  * \brief Add Ant X-machine to the current being used X-machine list.
  * \param antID Variable for the X-machine memory.
  * \param antX Variable for the X-machine memory.
@@ -1091,8 +1093,9 @@ void add_Ant_agent_internal(xmachine_memory_Ant * agent, xmachine_memory_Ant_sta
  * \param isInNest Variable for the X-machine memory.
  * \param antDirection Variable for the X-machine memory.
  * \param state Variable for the X-machine memory.
+ * \param lastFoodConc Variable for the X-machine memory.
  */
-void add_Ant_agent(int antID, double antX, double antY, double foodLevel, int isFed, int isInNest, int antDirection, int state)
+void add_Ant_agent(int antID, double antX, double antY, double foodLevel, int isFed, int isInNest, int antDirection, int state, double lastFoodConc)
 {
 	xmachine_memory_Ant * current;
 
@@ -1107,6 +1110,7 @@ void add_Ant_agent(int antID, double antX, double antY, double foodLevel, int is
 	current->isInNest = isInNest;
 	current->antDirection = antDirection;
 	current->state = state;
+	current->lastFoodConc = lastFoodConc;
 }
 
 xmachine_memory_Pheromone_state * init_Pheromone_state()
@@ -1610,6 +1614,7 @@ xmachine_memory_Food * init_Food_agent()
 	current->foodX = 0.0;
 	current->foodY = 0.0;
 	current->radius = 0.0;
+	current->concentration = 0.0;
 
 	return current;
 }
@@ -1636,6 +1641,7 @@ void unittest_init_Food_agent()
 		current_xmachine_Food->foodX = 0.0;
 		current_xmachine_Food->foodY = 0.0;
 		current_xmachine_Food->radius = 0.0;
+		current_xmachine_Food->concentration = 0.0;
 	
 }
 
@@ -1702,15 +1708,16 @@ void add_Food_agent_internal(xmachine_memory_Food * agent, xmachine_memory_Food_
 
 }
 
-/** \fn void add_Food_agent(int foodID, double size, double foodX, double foodY, double radius)
+/** \fn void add_Food_agent(int foodID, double size, double foodX, double foodY, double radius, double concentration)
  * \brief Add Food X-machine to the current being used X-machine list.
  * \param foodID Variable for the X-machine memory.
  * \param size Variable for the X-machine memory.
  * \param foodX Variable for the X-machine memory.
  * \param foodY Variable for the X-machine memory.
  * \param radius Variable for the X-machine memory.
+ * \param concentration Variable for the X-machine memory.
  */
-void add_Food_agent(int foodID, double size, double foodX, double foodY, double radius)
+void add_Food_agent(int foodID, double size, double foodX, double foodY, double radius, double concentration)
 {
 	xmachine_memory_Food * current;
 
@@ -1722,6 +1729,7 @@ void add_Food_agent(int foodID, double size, double foodX, double foodY, double 
 	current->foodX = foodX;
 	current->foodY = foodY;
 	current->radius = radius;
+	current->concentration = concentration;
 }
 
 
@@ -1915,6 +1923,28 @@ int get_state()
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /
     return (int)0;
+}
+
+/** \fn void set_lastFoodConc(double lastFoodConc)
+ * \brief Set lastFoodConc memory variable for current X-machine.
+ * \param lastFoodConc New value for variable.
+ */
+void set_lastFoodConc(double lastFoodConc)
+{
+	if(current_xmachine->xmachine_Ant) (*current_xmachine->xmachine_Ant).lastFoodConc = lastFoodConc;
+}
+
+/** \fn double get_lastFoodConc()
+ * \brief Get lastFoodConc memory variable from current X-machine.
+ * \return Value for variable.
+ */
+double get_lastFoodConc()
+{
+	if(current_xmachine->xmachine_Ant) return (*current_xmachine->xmachine_Ant).lastFoodConc;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (double)0;
 }
 
 /** \fn void set_pheromoneID(int pheromoneID)
@@ -2219,6 +2249,28 @@ void set_radius(double radius)
 double get_radius()
 {
 	if(current_xmachine->xmachine_Food) return (*current_xmachine->xmachine_Food).radius;
+
+    // suppress compiler warning by returning dummy value /
+    // this statement should rightfully NEVER be reached /
+    return (double)0;
+}
+
+/** \fn void set_concentration(double concentration)
+ * \brief Set concentration memory variable for current X-machine.
+ * \param concentration New value for variable.
+ */
+void set_concentration(double concentration)
+{
+	if(current_xmachine->xmachine_Food) (*current_xmachine->xmachine_Food).concentration = concentration;
+}
+
+/** \fn double get_concentration()
+ * \brief Get concentration memory variable from current X-machine.
+ * \return Value for variable.
+ */
+double get_concentration()
+{
+	if(current_xmachine->xmachine_Food) return (*current_xmachine->xmachine_Food).concentration;
 
     // suppress compiler warning by returning dummy value /
     // this statement should rightfully NEVER be reached /

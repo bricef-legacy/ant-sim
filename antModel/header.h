@@ -171,6 +171,7 @@ struct xmachine_memory_Ant
 	int isInNest;	/**< X-machine memory variable isInNest of type int. */
 	int antDirection;	/**< X-machine memory variable antDirection of type int. */
 	int state;	/**< X-machine memory variable state of type int. */
+	double lastFoodConc;	/**< X-machine memory variable lastFoodConc of type double. */
 };
 
 /** \struct xmachine_memory_Ant_holder
@@ -325,6 +326,7 @@ struct xmachine_memory_Food
 	double foodX;	/**< X-machine memory variable foodX of type double. */
 	double foodY;	/**< X-machine memory variable foodY of type double. */
 	double radius;	/**< X-machine memory variable radius of type double. */
+	double concentration;	/**< X-machine memory variable concentration of type double. */
 };
 
 /** \struct xmachine_memory_Food_holder
@@ -406,6 +408,7 @@ struct m_foodInformation
 	double foodY;	/**< Message memory variable foodY of type double. */
 	double size;	/**< Message memory variable size of type double. */
 	double radius;	/**< Message memory variable radius of type double. */
+	double concentration;	/**< Message memory variable concentration of type double. */
 };
 
 /** \var void* FLAME_m_foodEaten_composite_params\n
@@ -902,7 +905,7 @@ xmachine_memory_Ant * init_Ant_agent();
 void free_Ant_agent(xmachine_memory_Ant_holder * tmp, xmachine_memory_Ant_state * state);
 void transition_Ant_agent(xmachine_memory_Ant_holder * tmp, xmachine_memory_Ant_state * from_state, xmachine_memory_Ant_state * to_state);
 void add_Ant_agent_internal(xmachine_memory_Ant * agent, xmachine_memory_Ant_state * state);
-void add_Ant_agent(int antID, double antX, double antY, double foodLevel, int isFed, int isInNest, int antDirection, int state);
+void add_Ant_agent(int antID, double antX, double antY, double foodLevel, int isFed, int isInNest, int antDirection, int state, double lastFoodConc);
 void unittest_init_Ant_agent();
 void unittest_free_Ant_agent();
 xmachine_memory_Pheromone_state * init_Pheromone_state();
@@ -942,7 +945,7 @@ xmachine_memory_Food * init_Food_agent();
 void free_Food_agent(xmachine_memory_Food_holder * tmp, xmachine_memory_Food_state * state);
 void transition_Food_agent(xmachine_memory_Food_holder * tmp, xmachine_memory_Food_state * from_state, xmachine_memory_Food_state * to_state);
 void add_Food_agent_internal(xmachine_memory_Food * agent, xmachine_memory_Food_state * state);
-void add_Food_agent(int foodID, double size, double foodX, double foodY, double radius);
+void add_Food_agent(int foodID, double size, double foodX, double foodY, double radius, double concentration);
 void unittest_init_Food_agent();
 void unittest_free_Food_agent();
 
@@ -958,7 +961,7 @@ m_newPheromoneInput * get_first_newPheromoneInput_message(void);
 m_newPheromoneInput * get_next_newPheromoneInput_message(m_newPheromoneInput * current);
 void freenewPheromoneInputmessages(void);
 
-void add_foodInformation_message(int foodID, double foodX, double foodY, double size, double radius);
+void add_foodInformation_message(int foodID, double foodX, double foodY, double size, double radius, double concentration);
 m_foodInformation * add_foodInformation_message_internal(void);
 m_foodInformation * get_first_foodInformation_message(void);
 m_foodInformation * get_next_foodInformation_message(m_foodInformation * current);
@@ -1005,6 +1008,8 @@ void set_antDirection(int antDirection);
 int get_antDirection();
 void set_state(int state);
 int get_state();
+void set_lastFoodConc(double lastFoodConc);
+double get_lastFoodConc();
 void set_pheromoneID(int pheromoneID);
 int get_pheromoneID();
 void set_life(double life);
@@ -1033,6 +1038,8 @@ void set_foodY(double foodY);
 double get_foodY();
 void set_radius(double radius);
 double get_radius();
+void set_concentration(double concentration);
+double get_concentration();
 int agent_get_id(void);
 double agent_get_x(void);
 double agent_get_y(void);

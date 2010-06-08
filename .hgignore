@@ -2,6 +2,8 @@
 #ignore generated files
 syntax: glob
 *.o
+*.pyc
 
 syntax: regexp
 working/*
+visu/*
