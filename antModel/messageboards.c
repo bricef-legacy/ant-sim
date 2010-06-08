@@ -258,15 +258,16 @@ m_newPheromoneInput * get_next_newPheromoneInput_message(m_newPheromoneInput * c
 	return getInternalMessage_newPheromoneInput();
 }
 
-/** \fn void add_foodInformation_message(int foodID, double foodX, double foodY, double size, double radius)
+/** \fn void add_foodInformation_message(int foodID, double foodX, double foodY, double size, double radius, double concentration)
  * \brief Add foodInformation message by calling internal and processing.
  * \param foodID Message variable.
  * \param foodX Message variable.
  * \param foodY Message variable.
  * \param size Message variable.
  * \param radius Message variable.
+ * \param concentration Message variable.
  */
-void add_foodInformation_message(int foodID, double foodX, double foodY, double size, double radius)
+void add_foodInformation_message(int foodID, double foodX, double foodY, double size, double radius, double concentration)
 {
     int rc;
 	m_foodInformation msg;
@@ -276,6 +277,7 @@ void add_foodInformation_message(int foodID, double foodX, double foodY, double 
     msg.foodY = foodY;
     msg.size = size;
     msg.radius = radius;
+    msg.concentration = concentration;
     
     
     rc = MB_AddMessage(b_foodInformation, &msg);

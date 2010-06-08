@@ -1124,18 +1124,20 @@
   <xagent>
     <name>Food</name>
     <foodID>1</foodID>
-    <size>100</size>
+    <size>10000</size>
     <foodX>50</foodX>
-    <foodY>50</foodY>
-    <radius>15</radius>
+    <foodY>150</foodY>
+    <radius>5</radius>
+    <concentration>1.0</concentration>
   </xagent>
   <xagent>
     <name>Food</name>
     <foodID>2</foodID>
-    <size>5</size>
-    <foodX>160</foodX>
-    <foodY>170</foodY>
+    <size>10000</size>
+    <foodX>250</foodX>
+    <foodY>150</foodY>
     <radius>5</radius>
+    <concentration>0.1</concentration>
   </xagent>
 </states>
 

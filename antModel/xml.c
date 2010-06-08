@@ -358,6 +358,7 @@ int readAgentXML(char * location,
 	int in_isInNest = 0;
 	int in_antDirection = 0;
 	int in_state = 0;
+	int in_lastFoodConc = 0;
 	int in_pheromoneID = 0;
 	int in_life = 0;
 	int in_pheromoneX = 0;
@@ -372,6 +373,7 @@ int readAgentXML(char * location,
 	int in_foodX = 0;
 	int in_foodY = 0;
 	int in_radius = 0;
+	int in_concentration = 0;
 	
 	xmachine_memory_Ant * current_Ant_agent = NULL;
 	xmachine_memory_Pheromone * current_Pheromone_agent = NULL;
@@ -793,6 +795,8 @@ int readAgentXML(char * location,
 			if(strcmp(buffer, "/antDirection") == 0) { in_antDirection = 0; }
 			if(strcmp(buffer, "state") == 0) { in_state = 1; }
 			if(strcmp(buffer, "/state") == 0) { in_state = 0; }
+			if(strcmp(buffer, "lastFoodConc") == 0) { in_lastFoodConc = 1; }
+			if(strcmp(buffer, "/lastFoodConc") == 0) { in_lastFoodConc = 0; }
 			if(strcmp(buffer, "pheromoneID") == 0) { in_pheromoneID = 1; }
 			if(strcmp(buffer, "/pheromoneID") == 0) { in_pheromoneID = 0; }
 			if(strcmp(buffer, "life") == 0) { in_life = 1; }
@@ -821,6 +825,8 @@ int readAgentXML(char * location,
 			if(strcmp(buffer, "/foodY") == 0) { in_foodY = 0; }
 			if(strcmp(buffer, "radius") == 0) { in_radius = 1; }
 			if(strcmp(buffer, "/radius") == 0) { in_radius = 0; }
+			if(strcmp(buffer, "concentration") == 0) { in_concentration = 1; }
+			if(strcmp(buffer, "/concentration") == 0) { in_concentration = 0; }
 			
 			index = 0;
 			buffer[index] = '\0';
@@ -880,6 +886,7 @@ int readAgentXML(char * location,
 					if(in_isInNest) { current_Ant_agent->isInNest = atoi(buffer); }
 					if(in_antDirection) { current_Ant_agent->antDirection = atoi(buffer); }
 					if(in_state) { current_Ant_agent->state = atoi(buffer); }
+					if(in_lastFoodConc) { current_Ant_agent->lastFoodConc = atof(buffer); }
 				 }else if(in_Pheromone_agent == 1)
 				{
 					if(in_pheromoneID) { current_Pheromone_agent->pheromoneID = atoi(buffer); }
@@ -904,6 +911,7 @@ int readAgentXML(char * location,
 					if(in_foodX) { current_Food_agent->foodX = atof(buffer); }
 					if(in_foodY) { current_Food_agent->foodY = atof(buffer); }
 					if(in_radius) { current_Food_agent->radius = atof(buffer); }
+					if(in_concentration) { current_Food_agent->concentration = atof(buffer); }
 				 }
 			}
 			index = 0;
@@ -1483,6 +1491,10 @@ void write_Ant_agent(FILE *file, xmachine_memory_Ant * current)
 	sprintf(data, "%i", current->state);
 	fputs(data, file);
 	fputs("</state>\n", file);
+		fputs("<lastFoodConc>", file);
+	sprintf(data, "%f", current->lastFoodConc);
+	fputs(data, file);
+	fputs("</lastFoodConc>\n", file);
 
 	fputs("</xagent>\n", file);
 }
@@ -1584,6 +1596,10 @@ void write_Food_agent(FILE *file, xmachine_memory_Food * current)
 	sprintf(data, "%f", current->radius);
 	fputs(data, file);
 	fputs("</radius>\n", file);
+		fputs("<concentration>", file);
+	sprintf(data, "%f", current->concentration);
+	fputs(data, file);
+	fputs("</concentration>\n", file);
 
 	fputs("</xagent>\n", file);
 }

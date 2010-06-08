@@ -38,6 +38,8 @@ struct PheromoneData {
     int direction;
 };
 
+/*enum STATE {FORAGING, IDLE, TO_NEST} cur_state;*/
+
 int getDirection(double, double, double, double);
 
 double getDistance(double x, double y, double tx, double ty) {
@@ -338,9 +340,11 @@ int forage() {
         double xFood = foodInformation_message->foodX;
         double yFood = foodInformation_message->foodY;
         double foodRadius = foodInformation_message->radius;
+        double foodConc = foodInformation_message->concentration;
         double distanceToFood = getDistance(xFood, yFood, ANTX, ANTY);
 
         if (distanceToFood <= foodRadius + 2) {
+            LASTFOODCONC=foodConc;
             double foodSize = foodInformation_message->size;
             localId = foodInformation_message->foodID;
             FOODLEVEL = FOODLEVEL + antFoodFound;
@@ -355,6 +359,7 @@ int forage() {
     return 0;
 }
 
+
 //FoodGenerator agent
 //creates a new food agent dynamically by checking newFood_message
 int produceFood() {
@@ -367,7 +372,7 @@ int produceFood() {
 
         MEMORYFOODID++;
         printf("foodCounter %d\n",MEMORYFOODID);
-        add_Food_agent(MEMORYFOODID, foodSize, x, y, foodRadius);
+        add_Food_agent(MEMORYFOODID, foodSize, x, y, foodRadius, 0.0); //Arbitrary concentration, we should never need to produce new foods
         newFood_message = get_next_newFood_message(newFood_message);
     }
 
@@ -451,7 +456,7 @@ int foodInformation() {
         RADIUS = 15.0;
     }
 
-    add_foodInformation_message(FOODID, FOODX, FOODY, SIZE, RADIUS);
+    add_foodInformation_message(FOODID, FOODX, FOODY, SIZE, RADIUS, CONCENTRATION);
 
     return 0;
 }
@@ -483,12 +488,13 @@ int deposit() {
         double distance = getDistance(ANTX, ANTY, pheromoneInformation_message->pheromoneX, pheromoneInformation_message->pheromoneY);
         if (distance > 0.3 && distance <= minPheromoneDistance) {
             found = 1;
-            add_pheromoneIncreased_message(pheromoneInformation_message->pheromoneID, antPheromoneDepositionUnit); //0.0496
+            add_pheromoneIncreased_message(pheromoneInformation_message->pheromoneID, antPheromoneDepositionUnit*LASTFOODCONC);
         }
         pheromoneInformation_message = get_next_pheromoneInformation_message(pheromoneInformation_message);
     }
     if (found == 0) {
-        add_newPheromoneInput_message(ANTX, ANTY);
+        add_newPheromoneInput_message(ANTX, ANTY, LASTFOODCONC);
+        //TODO
     }
     return 0;
 }
@@ -534,6 +540,8 @@ int produce() {
     while (newPheromoneInput_message) {
         double x = newPheromoneInput_message->pheromoneX;
         double y = newPheromoneInput_message->pheromoneY;
+        double mult = newPheromoneInput_message->multiplier;
+        
         int found = 0;
         for (int i = 0; i < data.maxIndex; i++) {
             if (data.information1[i] == x && data.information2[i] == y) {

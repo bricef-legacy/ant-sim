@@ -18,3 +18,6 @@
 /** \def RADIUS
  * \brief Direct access to radius of Food agent memory variable. */
 #define RADIUS (current_xmachine_Food->radius)
+/** \def CONCENTRATION
+ * \brief Direct access to concentration of Food agent memory variable. */
+#define CONCENTRATION (current_xmachine_Food->concentration)
